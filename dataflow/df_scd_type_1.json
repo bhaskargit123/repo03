@@ -1,0 +1,170 @@
+{
+	"name": "df_scd_type_1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "ls_azSQL_SOURCE",
+						"type": "LinkedServiceReference"
+					},
+					"name": "srcEmployee"
+				},
+				{
+					"linkedService": {
+						"referenceName": "ls_azSQL_TARGET",
+						"type": "LinkedServiceReference"
+					},
+					"name": "trgEmployee"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "ls_azSQL_TARGET",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"linkedService": {
+						"referenceName": "ls_azSQL_TARGET",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "srcSelect"
+				},
+				{
+					"name": "trgSelect"
+				},
+				{
+					"name": "NewRecords"
+				},
+				{
+					"name": "InsertFlag"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "lookup1"
+				},
+				{
+					"name": "IsChangedRecords"
+				},
+				{
+					"name": "UpdatedRecords"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "alterRow1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          empid as integer,",
+				"          ename as string,",
+				"          location as string,",
+				"          salary as decimal(19,4)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'query',",
+				"     store: 'sqlserver',",
+				"     query: 'SELECT empid, ename, location, salary FROM employee',",
+				"     isolationLevel: 'READ_UNCOMMITTED') ~> srcEmployee",
+				"source(output(",
+				"          empid as integer,",
+				"          ename as string,",
+				"          location as string,",
+				"          salary as decimal(19,4)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'query',",
+				"     store: 'sqlserver',",
+				"     query: 'SELECT empid, ename, location, salary FROM employee',",
+				"     isolationLevel: 'READ_UNCOMMITTED') ~> trgEmployee",
+				"srcEmployee select(mapColumn(",
+				"          src_empid = empid,",
+				"          src_ename = ename,",
+				"          src_location = location,",
+				"          src_salary = salary",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> srcSelect",
+				"trgEmployee select(mapColumn(",
+				"          trg_empid = empid,",
+				"          trg_ename = ename,",
+				"          trg_location = location,",
+				"          trg_salary = salary",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> trgSelect",
+				"srcSelect, trgSelect exists(src_empid == trg_empid,",
+				"     negate:true,",
+				"     broadcast: 'auto')~> NewRecords",
+				"NewRecords derive(flag = 0) ~> InsertFlag",
+				"InsertFlag select(mapColumn(",
+				"          empid = src_empid,",
+				"          ename = src_ename,",
+				"          location = src_location,",
+				"          salary = src_salary,",
+				"          flag",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"srcSelect, trgSelect lookup(src_empid == trg_empid,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup1",
+				"lookup1 derive(ChangedRecordsFlag = iif(src_ename != trg_ename || src_location != trg_location || src_salary != trg_salary, 1,0)) ~> IsChangedRecords",
+				"IsChangedRecords filter(ChangedRecordsFlag==1) ~> UpdatedRecords",
+				"UpdatedRecords select(mapColumn(",
+				"          empid = src_empid,",
+				"          ename = src_ename,",
+				"          location = src_location,",
+				"          salary = src_salary,",
+				"          flag = ChangedRecordsFlag",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2 alterRow(updateIf(1==1)) ~> alterRow1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table',",
+				"     store: 'sqlserver',",
+				"     schemaName: 'dbo',",
+				"     tableName: 'employee',",
+				"     insertable: true,",
+				"     updateable: false,",
+				"     deletable: false,",
+				"     upsertable: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1",
+				"alterRow1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table',",
+				"     store: 'sqlserver',",
+				"     schemaName: 'dbo',",
+				"     tableName: 'employee',",
+				"     insertable: false,",
+				"     updateable: true,",
+				"     deletable: false,",
+				"     upsertable: false,",
+				"     keys:['empid'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink2"
+			]
+		}
+	}
+}
