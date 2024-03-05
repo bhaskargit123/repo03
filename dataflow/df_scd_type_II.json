@@ -176,6 +176,7 @@
 				"     updateable: true,",
 				"     deletable: false,",
 				"     upsertable: false,",
+				"     keys:['CustomerKey'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError',",
