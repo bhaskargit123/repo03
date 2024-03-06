@@ -1,0 +1,25 @@
+{
+	"name": "schedulingEveryDayAt8_20AM_IST",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2024-03-06T02:44:00",
+				"timeZone": "India Standard Time",
+				"schedule": {
+					"minutes": [
+						20
+					],
+					"hours": [
+						8
+					]
+				}
+			}
+		}
+	}
+}
