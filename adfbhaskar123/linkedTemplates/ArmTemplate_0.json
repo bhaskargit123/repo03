@@ -510,7 +510,14 @@
 					{
 						"name": "Copy data1",
 						"type": "Copy",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "Wait1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"policy": {
 							"timeout": "0.12:00:00",
 							"retry": 0,
@@ -566,6 +573,15 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 60
+						}
 					}
 				],
 				"policy": {
@@ -699,7 +715,7 @@
 						"timeZone": "India Standard Time",
 						"schedule": {
 							"minutes": [
-								20
+								30
 							],
 							"hours": [
 								8
