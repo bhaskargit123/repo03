@@ -11,6 +11,12 @@
 		"ls_azSQL_TARGET_connectionString": {
 			"value": ""
 		},
+		"ls_bhaskaradls_accountKey": {
+			"value": ""
+		},
+		"ls_bhaskaradls_properties_typeProperties_url": {
+			"value": "https://bhaskaradls.dfs.core.windows.net/"
+		},
 		"containerUri": {
 			"value": ""
 		},
