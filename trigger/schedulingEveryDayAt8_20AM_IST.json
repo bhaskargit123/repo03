@@ -2,7 +2,7 @@
 	"name": "schedulingEveryDayAt8_20AM_IST",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [],
 		"type": "ScheduleTrigger",
 		"typeProperties": {
