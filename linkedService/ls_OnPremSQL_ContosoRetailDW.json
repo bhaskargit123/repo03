@@ -1,0 +1,17 @@
+{
+	"name": "ls_OnPremSQL_ContosoRetailDW",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=True;data source=ADE;initial catalog=ContosoRetailDW",
+			"userName": "ADE\\bhaskar",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI2YTI4YjhiOS1hNDkzLTQyMTMtOGRhOC1mMDA3MzFiYjVhOTciLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "SelfHosted-IR",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

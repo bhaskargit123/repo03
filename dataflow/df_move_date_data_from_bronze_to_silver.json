@@ -1,0 +1,91 @@
+{
+	"name": "df_move_date_data_from_bronze_to_silver",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "ls_adls_productionadls",
+						"type": "LinkedServiceReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "ls_adls_productionadls",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "select1"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Datekey as string,",
+				"          FullDateLabel as string,",
+				"          DateDescription as string,",
+				"          CalendarYear as string,",
+				"          CalendarYearLabel as string,",
+				"          CalendarHalfYear as string,",
+				"          CalendarHalfYearLabel as string,",
+				"          CalendarQuarter as string,",
+				"          CalendarQuarterLabel as string,",
+				"          CalendarMonth as string,",
+				"          CalendarMonthLabel as string,",
+				"          CalendarWeek as string,",
+				"          CalendarWeekLabel as string,",
+				"          CalendarDayOfWeek as string,",
+				"          CalendarDayOfWeekLabel as string,",
+				"          FiscalYear as string,",
+				"          FiscalYearLabel as string,",
+				"          FiscalHalfYear as string,",
+				"          FiscalHalfYearLabel as string,",
+				"          FiscalQuarter as string,",
+				"          FiscalQuarterLabel as string,",
+				"          FiscalMonth as string,",
+				"          FiscalMonthLabel as string,",
+				"          IsWorkDay as string,",
+				"          IsHoliday as string,",
+				"          HolidayName as string,",
+				"          EuropeSeason as string,",
+				"          NorthAmericaSeason as string,",
+				"          AsiaSeason as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet',",
+				"     fileSystem: 'bronze',",
+				"     fileName: 'Date.parquet') ~> source1",
+				"source1 select(mapColumn(",
+				"          Datekey,",
+				"          Year = CalendarYear,",
+				"          Month = CalendarMonthLabel",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 derive(Month = left(Month,3)) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     fileSystem: 'silver',",
+				"     folderPath: 'date',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}

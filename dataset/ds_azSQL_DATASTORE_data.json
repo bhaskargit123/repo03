@@ -1,0 +1,16 @@
+{
+	"name": "ds_azSQL_DATASTORE_data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_azSQL_DB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"table": "finadata"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

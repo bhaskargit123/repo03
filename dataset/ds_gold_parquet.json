@@ -1,0 +1,21 @@
+{
+	"name": "ds_gold_parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls_productionadls",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "output",
+				"fileSystem": "gold"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

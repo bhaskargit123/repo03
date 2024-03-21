@@ -1,0 +1,13 @@
+{
+	"name": "ds_ContosoRetailDW_Query",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_OnPremSQL_ContosoRetailDW",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

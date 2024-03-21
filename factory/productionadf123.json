@@ -1,0 +1,9 @@
+{
+	"name": "productionadf123",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "f9070aaa-958f-456e-ab63-b143df70c006",
+		"tenantId": "c1721880-76a8-4efe-b320-967c7fd1a746"
+	}
+}
